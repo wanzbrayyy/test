@@ -45,6 +45,16 @@ const AdminDashboard = () => {
     endDate: '',
   });
 
+  const [digitalProducts, setDigitalProducts] = useState([]);
+  const [newProduct, setNewProduct] = useState({
+    name: '',
+    description: '',
+    price: '',
+    file: null,
+    qrisImage: null,
+    paymentMethods: [],
+  });
+
   const { logout } = useAuth();
   const navigate = useNavigate();
 
@@ -61,7 +71,99 @@ const AdminDashboard = () => {
     if (storedPromos) {
       setPromos(storedPromos);
     }
+
+    const storedProducts = JSON.parse(localStorage.getItem('digitalProducts'));
+    if (storedProducts) {
+      setDigitalProducts(storedProducts);
+    }
   }, []);
+
+  const handleProductInputChange = (e) => {
+    if (e.target.type === 'file') {
+      setNewProduct({ ...newProduct, [e.target.name]: e.target.files[0] });
+    } else if (e.target.type === 'checkbox') {
+      const { name, checked } = e.target;
+      setNewProduct(prevState => {
+        const newPaymentMethods = checked
+          ? [...prevState.paymentMethods, name]
+          : prevState.paymentMethods.filter(method => method !== name);
+        return { ...prevState, paymentMethods: newPaymentMethods };
+      });
+    } else {
+      setNewProduct({ ...newProduct, [e.target.name]: e.target.value });
+    }
+  };
+
+  const handleAddProduct = async (e) => {
+    e.preventDefault();
+    if (!newProduct.name || !newProduct.price || !newProduct.file) {
+      toast({
+        title: "Gagal Menambahkan",
+        description: "Nama, harga, dan file produk harus diisi.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      const fileUrl = await uploadToCatbox(newProduct.file);
+      let qrisImageUrl = null;
+      if (newProduct.qrisImage) {
+        qrisImageUrl = await uploadToCatbox(newProduct.qrisImage);
+      }
+
+      const newProductData = {
+        id: Date.now(),
+        ...newProduct,
+        file: fileUrl,
+        qrisImage: qrisImageUrl,
+      };
+
+      const updatedProducts = [...digitalProducts, newProductData];
+      setDigitalProducts(updatedProducts);
+      localStorage.setItem('digitalProducts', JSON.stringify(updatedProducts));
+      setNewProduct({ name: '', description: '', price: '', file: null, qrisImage: null, paymentMethods: [] });
+      toast({
+        title: "Berhasil!",
+        description: "Produk digital baru telah ditambahkan.",
+      });
+    } catch (error) {
+      toast({
+        title: "Gagal Mengunggah File",
+        description: error.message || "Terjadi kesalahan saat mengunggah file.",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const uploadToCatbox = async (file) => {
+    const formData = new FormData();
+    formData.append('reqtype', 'fileupload');
+    formData.append('userhash', 'd7eed82ae3aece8a4b6f473dd');
+    formData.append('fileToUpload', file);
+
+    const response = await fetch('https://catbox.moe/user/api.php', {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error('Gagal mengunggah file ke Catbox.');
+    }
+
+    return await response.text();
+  };
+
+  const handleDeleteProduct = (id) => {
+    const updatedProducts = digitalProducts.filter(p => p.id !== id);
+    setDigitalProducts(updatedProducts);
+    localStorage.setItem('digitalProducts', JSON.stringify(updatedProducts));
+    toast({
+      title: "Berhasil!",
+      description: "Produk digital telah dihapus.",
+      variant: "destructive"
+    });
+  };
 
   const handleInputChange = (e, setState) => {
     setState({ ...newTestimonial, [e.target.name]: e.target.value });
@@ -163,8 +265,8 @@ const AdminDashboard = () => {
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-          <div className="bg-gray-800 p-6 rounded-lg">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+          <div className="bg-gray-800 p-6 rounded-lg lg:col-span-1">
             <h2 className="text-2xl font-bold mb-4">kelola portofolio</h2>
             <form onSubmit={handleAddTestimonial} className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <input type="text" name="title" value={newTestimonial.title} onChange={(e) => handleInputChange(e, setNewTestimonial)} placeholder="judul proyek" className="bg-gray-700 p-3 rounded-md focus:ring-2 focus:ring-cyan-500 outline-none" required />
@@ -187,7 +289,7 @@ const AdminDashboard = () => {
             </div>
           </div>
 
-          <div className="bg-gray-800 p-6 rounded-lg">
+          <div className="bg-gray-800 p-6 rounded-lg lg:col-span-1">
             <h2 className="text-2xl font-bold mb-4">kelola promo</h2>
             <form onSubmit={handleAddPromo} className="grid grid-cols-1 gap-4 mb-6">
               <input type="text" name="title" value={newPromo.title} onChange={handlePromoInputChange} placeholder="judul promo" className="bg-gray-700 p-3 rounded-md focus:ring-2 focus:ring-purple-500 outline-none" required />
@@ -203,6 +305,49 @@ const AdminDashboard = () => {
                     <p className="text-sm text-gray-400">berakhir: {promo.endDate}</p>
                   </div>
                   <Button onClick={() => handleDeletePromo(promo.id)} variant="destructive" size="sm">hapus</Button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-gray-800 p-6 rounded-lg lg:col-span-1">
+            <h2 className="text-2xl font-bold mb-4">Kelola Produk Digital</h2>
+            <form onSubmit={handleAddProduct} className="grid grid-cols-1 gap-4 mb-6">
+              <input type="text" name="name" value={newProduct.name} onChange={handleProductInputChange} placeholder="Nama Produk" className="bg-gray-700 p-3 rounded-md focus:ring-2 focus:ring-green-500 outline-none" required />
+              <textarea name="description" value={newProduct.description} onChange={handleProductInputChange} placeholder="Deskripsi Produk" className="bg-gray-700 p-3 rounded-md focus:ring-2 focus:ring-green-500 outline-none" rows="2" required></textarea>
+              <input type="text" name="price" value={newProduct.price} onChange={handleProductInputChange} placeholder="Harga (e.g., Rp 50.000)" className="bg-gray-700 p-3 rounded-md focus:ring-2 focus:ring-green-500 outline-none" required />
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">File Produk (zip, rar, etc)</label>
+                <input type="file" name="file" onChange={handleProductInputChange} className="w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-500 file:text-white hover:file:bg-green-600" required />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Gambar QRIS (opsional)</label>
+                <input type="file" name="qrisImage" onChange={handleProductInputChange} accept="image/*" className="w-full text-sm text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-500 file:text-white hover:file:bg-gray-600" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Metode Pembayaran</label>
+                <div className="flex flex-wrap gap-4">
+                  <label className="flex items-center gap-2">
+                    <input type="checkbox" name="qris" checked={newProduct.paymentMethods.includes('qris')} onChange={handleProductInputChange} className="form-checkbox h-5 w-5 text-green-600 bg-gray-700 border-gray-600 rounded focus:ring-green-500" />
+                    <span>QRIS</span>
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <input type="checkbox" name="dana" checked={newProduct.paymentMethods.includes('dana')} onChange={handleProductInputChange} className="form-checkbox h-5 w-5 text-blue-500 bg-gray-700 border-gray-600 rounded focus:ring-blue-500" />
+                    <span>DANA</span>
+                  </label>
+                  <label className="flex items-center gap-2">
+                    <input type="checkbox" name="gopay" checked={newProduct.paymentMethods.includes('gopay')} onChange={handleProductInputChange} className="form-checkbox h-5 w-5 text-blue-400 bg-gray-700 border-gray-600 rounded focus:ring-blue-400" />
+                    <span>GoPay</span>
+                  </label>
+                </div>
+              </div>
+              <Button type="submit" className="bg-green-600 hover:bg-green-700">Tambah Produk</Button>
+            </form>
+            <div className="h-64 overflow-y-auto pr-2">
+              {digitalProducts.map((product) => (
+                <div key={product.id} className="bg-gray-700 p-3 rounded-md mb-3 flex justify-between items-center">
+                  <span>{product.name}</span>
+                  <Button onClick={() => handleDeleteProduct(product.id)} variant="destructive" size="sm">Hapus</Button>
                 </div>
               ))}
             </div>

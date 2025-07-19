@@ -12,12 +12,12 @@ const Contact = () => {
   });
 
   const services = [
-    'Paket Cuan Lite (Rp30.000)',
-    'Paket UMKM (Rp40.000)', 
-    'Paket Landing Pro (Rp100.000)',
-    'Paket Startup Boost (Rp250.000)',
-    'Paket Sultan (Rp500.000)',
-    'Paket Ultimate Wanz (Rp1.000.000)',
+    'pake murah (Rp30.000)',
+    'paket kecil (Rp50.000)', 
+    'paket standard (Rp100.000)',
+    'paket medium (Rp70.000)',
+    'paket high (Rp200.000)',
+    'paket terbatas (Rp500.000)',
     'Konsultasi Custom'
   ];
 

@@ -16,6 +16,7 @@ import LoginPage from '@/pages/LoginPage';
 import AdminDashboard from '@/pages/admin/AdminDashboard';
 import { AuthProvider } from '@/contexts/AuthContext';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import PromoPage from '@/pages/PromoPage';
 import PromoDetailPage from '@/pages/PromoDetailPage';
 import TestimonialDetailPage from '@/pages/TestimonialDetailPage';
 import ProductDetailPage from '@/pages/ProductDetailPage';
@@ -65,7 +66,8 @@ function App() {
             <Route path="/digital-products" element={<DigitalProductsPage />} />
             <Route path="/digital-products/:slug" element={<ProductDetailPage />} />
             <Route path="/contact" element={<ContactPage />} />
-            <Route path="/promo" element={<PromoDetailPage />} />
+            <Route path="/promo" element={<PromoPage />} />
+            <Route path="/promo/:id" element={<PromoDetailPage />} />
           </Route>
           <Route path="/login" element={<LoginPage />} />
           <Route 

@@ -180,49 +180,77 @@ const DigitalProductsPage = () => {
     };
 
     const handlePaymentConfirm = async (file) => {
-        toast({ title: 'mengirim bukti...', description: 'mohon tunggu sebentar.' });
-        setIsModalOpen(false);
+    toast({ title: 'Mengirim bukti...', description: 'Mohon tunggu sebentar.' });
+    setIsModalOpen(false);
 
-        const botToken = "7377371355:AAFEtwthhXAepvrDbgLDOZAQeBjHVWDbDsI";
-        const adminChatId = "7774371395";
-        const caption = `pembelian baru untuk: *${selectedProduct.name}*\n\nharga: *${selectedProduct.price}*`;
+    try {
+      const imageUrl = await uploadToCatbox(file);
 
-        const formData = new FormData();
-        formData.append('chat_id', adminChatId);
-        formData.append('photo', file);
-        formData.append('caption', caption);
+      const botToken = "7377371355:AAFEtwthhXAepvrDbgLDOZAQeBjHVWDbDsI";
+      const adminChatId = "wanzofc_tech";
+      const caption = `Pembelian baru untuk: *${selectedProduct.name}*\n\nHarga: *${selectedProduct.price}*\n\nBukti Transfer: ${imageUrl}`;
 
-        try {
-            const response = await fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
-                method: 'POST',
-                body: formData,
-            });
-            const result = await response.json();
+      const response = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          chat_id: adminChatId,
+          text: caption,
+          parse_mode: 'Markdown',
+        }),
+      });
 
-            if (result.ok) {
-                toast({
-                    title: 'pembayaran terkirim! 🎉',
-                    description: 'bukti transfer berhasil dikirim ke admin. file akan dikirim via bot setelah diverifikasi.',
-                });
-                // Simulate sending file link via bot
-                setTimeout(() => {
-                     toast({
-                        title: 'file terkirim! 🚀',
-                        description: `cek bot telegram anda untuk link download file ${selectedProduct.name}.`,
-                    });
-                }, 3000);
-            } else {
-                throw new Error(result.description);
-            }
-        } catch (error) {
-            toast({
-                title: 'gagal mengirim bukti! 🚨',
-                description: 'terjadi kesalahan. silakan hubungi admin via whatsapp.',
-                variant: 'destructive',
-            });
-            console.error(error);
-        }
-    };
+      const result = await response.json();
+
+      if (result.ok) {
+        toast({
+          title: 'Pembayaran terkirim! 🎉',
+          description: 'Bukti transfer berhasil dikirim ke admin. File akan dikirim via bot setelah diverifikasi.',
+        });
+        // Simulate sending file link via bot
+        setTimeout(() => {
+          toast({
+            title: 'File terkirim! 🚀',
+            description: `Cek bot telegram Anda untuk link download file ${selectedProduct.name}.`,
+          });
+        }, 3000);
+      } else {
+        throw new Error(result.description);
+      }
+    } catch (error) {
+      toast({
+        title: 'Gagal mengirim bukti! 🚨',
+        description: 'Terjadi kesalahan. Silakan hubungi admin via WhatsApp.',
+        variant: 'destructive',
+      });
+      console.error(error);
+    }
+  };
+
+  const uploadToCatbox = async (file) => {
+    const formData = new FormData();
+    formData.append('reqtype', 'fileupload');
+    formData.append('userhash', 'd7eed82ae3aece8a4b6f473dd');
+    formData.append('fileToUpload', file);
+
+    const response = await fetch('https://catbox.moe/user/api.php', {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Gagal mengunggah file ke Catbox: ${errorText}`);
+    }
+
+    const fileUrl = await response.text();
+    if (!fileUrl.startsWith('http')) {
+        throw new Error(`Catbox API mengembalikan respons yang tidak valid: ${fileUrl}`);
+    }
+    return fileUrl;
+  };
 
 
     return (

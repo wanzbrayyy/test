@@ -110,7 +110,7 @@ const Features = () => {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            Keahlian Teknologi Kami
+            skill my web
           </motion.h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

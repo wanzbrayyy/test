@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 const Packages = () => {
   const packages = [
     {
-      name: 'Paket Cuan Lite',
+      name: 'paket murah',
       price: 'Rp30.000',
       description: 'Website basic dengan 1 halaman',
       features: [
@@ -20,8 +20,8 @@ const Packages = () => {
       icon: 'fa-rocket'
     },
     {
-      name: 'Paket UMKM',
-      price: 'Rp40.000',
+      name: 'paket standard',
+      price: 'Rp50.000',
       description: 'Cocok untuk bisnis kecil',
       features: [
         'Multi halaman (3-5 halaman)',
@@ -36,8 +36,8 @@ const Packages = () => {
       icon: 'fa-store'
     },
     {
-      name: 'Paket Landing Pro',
-      price: 'Rp100.000',
+      name: 'paket medium',
+      price: 'Rp70.000',
       description: 'Full landing page + form WA',
       features: [
         'Landing page premium',
@@ -68,8 +68,8 @@ const Packages = () => {
       icon: 'fa-chart-line'
     },
     {
-      name: 'Paket Sultan',
-      price: 'Rp500.000',
+      name: 'paket high',
+      price: 'Rp200.000',
       description: 'Website profesional siap pakai',
       features: [
         'Full-stack application',
@@ -77,6 +77,8 @@ const Packages = () => {
         'Multi-user system',
         'Advanced animations',
         'API integration',
+        'Bebas Request',
+        'free domain',
         'Cloud hosting'
       ],
       popular: false,
@@ -84,8 +86,8 @@ const Packages = () => {
       icon: 'fa-gem'
     },
     {
-      name: 'Paket Ultimate Wanz',
-      price: 'Rp1.000.000',
+      name: 'paket terbatas',
+      price: 'Rp500.000',
       description: 'Web custom dengan fitur spesial',
       features: [
         'Custom development',

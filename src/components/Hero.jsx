@@ -65,7 +65,7 @@ const Hero = () => {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2, duration: 1, ease: 'easeOut' }}
             >
-                <iframe src='https://my.spline.design/gilb-3d-e44256247c433159932064156012a95c/' frameBorder='0' width='100%' height='100%' style={{ minHeight: '400px' }}></iframe>
+                <iframe src='https://my.spline.design/interactivespheres-1b9b0c8905182905e997d4f997c555b5/' frameBorder='0' width='100%' height='100%' style={{ minHeight: '400px' }}></iframe>
             </motion.div>
         </div>
       </div>

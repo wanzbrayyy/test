@@ -18,7 +18,7 @@ const LoadingScreen = () => {
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              🚀
+              ☁️
             </motion.div>
           </div>
         </motion.div>
@@ -30,7 +30,7 @@ const LoadingScreen = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
         >
-          WanzoFC Tech
+        WANZOFC TECH 
         </motion.h1>
 
         <motion.p
@@ -39,10 +39,10 @@ const LoadingScreen = () => {
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8 }}
         >
-          Memuat keajaiban digital...
+          LOADING TO HOME PAGE
         </motion.p>
 
-        {/* Loading Bar */}
+        {}
         <div className="w-64 h-2 bg-gray-700 rounded-full mx-auto overflow-hidden">
           <motion.div
             className="h-full bg-gradient-to-r from-cyan-400 to-purple-500"

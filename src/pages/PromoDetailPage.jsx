@@ -1,74 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 const PromoDetailPage = () => {
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
-    const [product, setProduct] = useState('Produk A');
+    const { id } = useParams();
+    const [promo, setPromo] = useState(null);
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const message = `Halo, saya tertarik dengan promo. Nama: ${name}, Email: ${email}, Produk: ${product}`;
-        const whatsappUrl = `https://api.whatsapp.com/send?phone=6281234567890&text=${encodeURIComponent(message)}`;
-        window.open(whatsappUrl, '_blank');
-    };
+    useEffect(() => {
+        const storedPromos = JSON.parse(localStorage.getItem('promos')) || [];
+        const currentPromo = storedPromos.find(p => p.id.toString() === id);
+        setPromo(currentPromo);
+    }, [id]);
+
+    if (!promo) {
+        return (
+            <div className="min-h-screen bg-gray-900 text-white flex items-center justify-center">
+                <h1 className="text-4xl">Promo not found</h1>
+            </div>
+        );
+    }
 
     return (
-        <div className="container mx-auto py-12">
-            <h1 className="text-4xl font-bold text-center mb-8">Detail Promo</h1>
-            <div className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-lg">
-                <h2 className="text-2xl font-bold mb-4">Promo Spesial Akhir Tahun!</h2>
-                <p className="mb-4">
-                    Dapatkan diskon 50% untuk semua produk digital kami. Promo berlaku hingga 31 Desember 2024.
-                </p>
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-4">
-                        <label htmlFor="name" className="block text-gray-700 font-bold mb-2">
-                            Nama
-                        </label>
-                        <input
-                            type="text"
-                            id="name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            required
-                        />
+        <div className="min-h-screen bg-gray-900 text-white p-8 pt-24">
+            <div className="container mx-auto">
+                <motion.div
+                    initial={{ opacity: 0, y: 50 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <h1 className="text-5xl font-bold text-center mb-4">{promo.title}</h1>
+                    <p className="text-xl text-center text-gray-400 mb-8">{promo.description}</p>
+                    <div className="max-w-2xl mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
+                        <h2 className="text-2xl font-bold mb-4">Claim Your Promo</h2>
+                        <p className="mb-4">
+                            This promo expires on: {new Date(promo.endDate).toLocaleDateString()}
+                        </p>
+                        {}
                     </div>
-                    <div className="mb-4">
-                        <label htmlFor="email" className="block text-gray-700 font-bold mb-2">
-                            Email
-                        </label>
-                        <input
-                            type="email"
-                            id="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                            required
-                        />
-                    </div>
-                    <div className="mb-4">
-                        <label htmlFor="product" className="block text-gray-700 font-bold mb-2">
-                            Pilih Produk
-                        </label>
-                        <select
-                            id="product"
-                            value={product}
-                            onChange={(e) => setProduct(e.target.value)}
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        >
-                            <option>Produk A</option>
-                            <option>Produk B</option>
-                            <option>Produk C</option>
-                        </select>
-                    </div>
-                    <button
-                        type="submit"
-                        className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold py-2 px-4 rounded-full"
-                    >
-                        Beli Sekarang
-                    </button>
-                </form>
+                </motion.div>
             </div>
         </div>
     );

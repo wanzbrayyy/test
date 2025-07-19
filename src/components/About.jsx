@@ -19,8 +19,9 @@ const About = () => {
   ];
 
   return (
-    <section id="about" className="py-20 px-4 bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
-      <div className="container mx-auto">
+    <section id="about" className="py-20 px-4" style={{ backgroundImage: `url(/images/header.jpg)`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+      <div className="bg-black bg-opacity-70 py-20">
+        <div className="container mx-auto">
         <div className="text-center mb-16">
           <motion.h2
             className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6"
@@ -42,12 +43,13 @@ const About = () => {
             transition={{ delay: 0.3, duration: 0.8 }}
             viewport={{ once: true }}
           >
-            Didesain profesional dengan teknologi modern seperti GSAP, Three.js, dan animasi Lottie karakter eksklusif Wanz. 
-            Kami menghadirkan solusi web yang tidak hanya cantik, tapi juga powerful!
+            di desain dengan bahasa react, nextjs, threejs masih banyak lagi
+            
+            kami menghadirkan solusi web yang tidak hanya cantik, tapi juga powerful!
           </motion.p>
         </div>
 
-        {/* Stats Section */}
+        {}
         <motion.div
           className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-16"
           initial={{ opacity: 0, y: 30 }}
@@ -74,7 +76,7 @@ const About = () => {
           ))}
         </motion.div>
 
-        {/* Technologies Section */}
+        {}
         <div className="text-center mb-12">
           <motion.h3
             className="text-3xl font-bold text-gray-900 dark:text-white mb-8"
@@ -83,7 +85,7 @@ const About = () => {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            Teknologi yang Kami Gunakan
+            bahasa dan libarry yang kami gunakan 
           </motion.h3>
 
           <motion.div
@@ -110,7 +112,7 @@ const About = () => {
           </motion.div>
         </div>
 
-        {/* CTA Section */}
+        {}
         <motion.div
           className="text-center"
           initial={{ opacity: 0, y: 30 }}

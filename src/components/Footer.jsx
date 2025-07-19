@@ -44,7 +44,7 @@ const Footer = () => {
     { 
       name: 'Twitter', 
       icon: 'fab fa-twitter', 
-      href: '#',
+      href: '@maverick',
       color: 'hover:text-cyan-400'
     }
   ];
@@ -53,7 +53,7 @@ const Footer = () => {
     if (link.href === '#') {
       toast({
         title: "🚧 fitur ini belum tersedia!",
-        description: "tapi jangan khawatir! anda bisa request di prompt berikutnya! 🚀",
+        description: "nect update",
       });
     } else {
       window.open(link.href, '_blank');
@@ -158,7 +158,7 @@ const Footer = () => {
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-gray-300 text-center md:text-left">
-              © {currentYear} wanzofc tech. all rights reserved.
+              © {currentYear} wanzofc tech. all rights
             </p>
             
             <div className="flex items-center space-x-6">
