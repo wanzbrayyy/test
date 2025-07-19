@@ -1,0 +1,54 @@
+:root {
+  --primary-color: #00bcd4;
+  --secondary-color: #ff4081;
+  --background-color-light: #f0f4f8;
+  --background-color-dark: #1a202c;
+  --text-color-light: #1a202c;
+  --text-color-dark: #e2e8f0;
+  --primary-gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+}
+
+.light {
+  --background-color: var(--background-color-light);
+  --text-color: var(--text-color-light);
+}
+
+.dark {
+  --background-color: var(--background-color-dark);
+  --text-color: var(--text-color-dark);
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+/* Theme Toggle */
+.theme-toggle {
+  position: relative;
+  width: 60px;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.theme-toggle::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 24px;
+  height: 24px;
+  background: white;
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.theme-toggle.dark::before {
+  transform: translateX(30px);
+  background: #1a1a2e;
+}
