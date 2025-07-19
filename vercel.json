@@ -1,8 +1,0 @@
-{
-  "rewrites": [
-    {
-      "source": "/:path((?!api/|static/|favicon.ico|manifest.json|_next/|sw.js).*)",
-      "destination": "/index.html"
-    }
-  ]
-}
